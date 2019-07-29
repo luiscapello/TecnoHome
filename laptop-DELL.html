@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>Laptop's DELL</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script>
+        window.onload = function () {
+            // Variables
+            let baseDeDatos = [
+                {
+                    id: 1,
+                    nombre: 'Patata',
+                    precio: 1
+                },
+                {
+                    id: 2,
+                    nombre: 'Cebolla',
+                    precio: 1.2
+                },
+                {
+                    id: 3,
+                    nombre: 'Calabacin',
+                    precio: 2.1
+                },
+                {
+                    id: 4,
+                    nombre: 'Fresas',
+                    precio: 0.6
+                }
+
+            ]
+            let $items = document.querySelector('#items');
+            let carrito = [];
+            let total = 0;
+            let $carrito = document.querySelector('#carrito');
+            let $total = document.querySelector('#total');
+            // Funciones
+            function renderItems () {
+                for (let info of baseDeDatos) {
+                    // Estructura
+                    let miNodo = document.createElement('div');
+                    miNodo.classList.add('card', 'col-sm-4');
+                    // Body
+                    let miNodoCardBody = document.createElement('div');
+                    miNodoCardBody.classList.add('card-body');
+                    // Titulo
+                    let miNodoTitle = document.createElement('h5');
+                    miNodoTitle.classList.add('card-title');
+                    miNodoTitle.textContent = info['nombre'];
+                    // Precio
+                    let miNodoPrecio = document.createElement('p');
+                    miNodoPrecio.classList.add('card-text');
+                    miNodoPrecio.textContent = info['precio'] + '€';
+                    // Boton
+                    let miNodoBoton = document.createElement('button');
+                    miNodoBoton.classList.add('btn', 'btn-primary');
+                    miNodoBoton.textContent = '+';
+                    miNodoBoton.setAttribute('marcador', info['id']);
+                    miNodoBoton.addEventListener('click', anyadirCarrito);
+                    // Insertamos
+                    miNodoCardBody.appendChild(miNodoTitle);
+                    miNodoCardBody.appendChild(miNodoPrecio);
+                    miNodoCardBody.appendChild(miNodoBoton);
+                    miNodo.appendChild(miNodoCardBody);
+                    $items.appendChild(miNodo);
+                }
+            }
+            function anyadirCarrito () {
+                // Anyadimos el Nodo a nuestro carrito
+                carrito.push(this.getAttribute('marcador'))
+                // Calculo el total
+                calcularTotal();
+                // Renderizamos el carrito
+                renderizarCarrito();
+
+            }
+
+            function renderizarCarrito () {
+                // Vaciamos todo el html
+                $carrito.textContent = '';
+                // Generamos los Nodos a partir de carrito
+                carrito.forEach(function (item, indice) {
+                    // Obtenemos el item que necesitamos de la variable base de datos
+                    let miItem = baseDeDatos.filter(function(itemBaseDatos) {
+                        return itemBaseDatos['id'] == item;
+                    });
+                    // Creamos el nodo del item del carrito
+                    let miNodo = document.createElement('li');
+                    miNodo.classList.add('list-group-item', 'text-right');
+                    miNodo.textContent = `${miItem[0]['nombre']} - ${miItem[0]['precio']}€`;
+                    // Boton de borrar
+                    let miBoton = document.createElement('button');
+                    miBoton.classList.add('btn', 'btn-danger', 'mx-5');
+                    miBoton.textContent = 'X';
+                    miBoton.setAttribute('posicion', indice);
+                    miBoton.addEventListener('click', borrarItemCarrito);
+                    // Mezclamos nodos
+                    miNodo.appendChild(miBoton);
+                    $carrito.appendChild(miNodo);
+                })
+            }
+
+            function borrarItemCarrito () {
+                // Obtenemos la posicion que hay en el boton pulsado
+                let posicion = this.getAttribute('posicion');
+                // Borramos la posicion que nos interesa
+                carrito.splice(posicion, 1);
+                // volvemos a renderizar
+                renderizarCarrito();
+                // Calculamos de nuevo el precio
+                calcularTotal();
+            }
+
+            function calcularTotal () {
+                // Limpiamos precio anterior
+                total = 0;
+                // Recorremos el array del carrito
+                for (let item of carrito) {
+                    // De cada elemento obtenemos su precio
+                    let miItem = baseDeDatos.filter(function(itemBaseDatos) {
+                        return itemBaseDatos['id'] == item;
+                    });
+                    total = total + miItem[0]['precio'];
+                }
+                // Formateamos el total para que solo tenga dos decimales
+                let totalDosDecimales = total.toFixed(2);
+                // Renderizamos el precio en el HTML
+                $total.textContent = totalDosDecimales;
+            }
+            // Eventos
+
+            // Inicio
+            renderItems();
+        }
+    </script>
+
+
+
+	<link rel="stylesheet" href="css/estilos.css">
+	<link rel="stylesheet" href="css/style.css">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+
+	<script src="js/jquery-3.2.1.js"></script>
+	<script src="js/script.js"></script>
+</head>
+<body>
+	<header class="full-width NavBarP">
+	<div class="full-width NavBarP-Logo"><img src="" height="80"></div>
+	<nav class="full-width NavBarP-Nav">
+		<ul class="full-width list-unstyled">
+			<li><a href="index.html">Inicio</a></li>
+			<li><a href="productos2.html">Productos</a></li>
+			<li><a href="acerca de.html">Acerca de</a></li>
+		</ul>
+	</nav>
+	<i class="fa fa-bars visible-xs btn-menuMobile ShowMenuMobile" aria-hidden="true"></i>
+</header>
+
+<script src="js/jquery-3.1.0.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/main.js"></script>
+<section class="banner">
+		<div class="banner-content">
+			<div class="wrap">
+
+				<h1>Laptop's DELL</h1>
+
+				<div class="store-wrapper">
+					<section class="products-list">
+						<div class="product-item" category="pc_hp">
+							<img src="assets\img\laptop's\dell\INSPIRON 5584 I7 de 15.6\1000219173_ra.jpg" alt="" style="width:100%;" >
+							<p>Pantalla HD de 15.6"
+Resolución HD típica de 1366 x 768. La pantalla brillante BrightView mantiene los colores vivos en tus fotos y videos.
+Procesador de 8ª generación Intel Core i7-8565U
+Plataforma de muy baja tensión. El procesamiento de ocho vías de cuatro núcleos proporciona la máxima potencia de alta eficiencia.
+Memoria RAM de 8 GB
+Disco duro de 2TB
+Gráficos NVIDIA GeForce MX130
+ C</p>
+							<div>
+								<a href="" class="precio">Precio $19,999</a>
+								<br>
+								<a href="INSPIRON 5584 I7 de 15.6.html" class="precio">Galeria</a>
+								<br>
+								<a href="carrito.html" class="compra">Comprar</a>
+							</div>
+						</div>
+
+						<div class="product-item" category="pc_hp">
+							<img src="assets\img\laptop's\dell\convertible XPS13 9365 de 13.3\1000217952_ra.jpg" alt="" >
+							<p>Con sistema operativo Windows 10
+								Pantalla táctil Full HD de 13.3"
+La resolución de 1920 x 1080 tiene un color y una claridad impresionant
+Procesador de 8ª generación Intel Core i5-8200Y
+Memoria de sistema de 8GB para multitarea avanzada
+Unidad de estado sólido (SSD) de 256 GB
+Gráficos Intel HD
+1 puerto USB tipo C
+Velocidad del procesador Hasta 3.6 GHz.</p>
+							<div>
+								<a class="precio">Precio $31,999</a>
+								<br>
+								<a href="convertible XPS13 9365 de 13.html" class="precio">Galeria</a>
+								<br>
+								<a href="carrito.html" class="Precio">Comprar</a>
+							</div>
+						</div>
+
+						<div class="product-item" category="pc_hp">
+							<img src="assets\img\laptop's\dell\convertible INSPIRON 5582 de 15.6\1000219176cv11a.jpg" alt="" >
+							<p>Con sistema operativo Windows 10
+Pantalla táctil Full HD de 15.6"
+Procesador de 8ª generación Intel Core i7-8565U
+Memoria de sistema de 8GB para multitarea avanzada
+Disco duro de 2TB para un amplio espacio de almacenamiento de archivos
+Gráficos Intel UHD 620
+1 puerto USB tipo C
+Dos puertos USB 3.1
+La salida HDMI expande tus opciones de visualización
+Puertos adicionales
+Conectorcombinado de auriculares / micrófono.
+Velocidad del procesador
+Hasta 4.6 GHz.</p>
+							<div>
+								<a class="precio">Precio $20,999</a>
+								<br>
+								<a href="convertible INSPIRON 5582 de 15.6.html" class="precio">Galeria</a>
+								<br>
+								<a href="carrito.html" class="compra">Comprar</a>
+							</div>
+						</div>
+
+						<div class="product-item" category="pc_hp">
+							<img src="assets\img\laptop's\dell\convertible INSPIRON 5579 i5 de 15.6\1000214982le.jpg" alt="" >
+							<p>Con sistema operativo Windows 10
+Pantalla touch de 15.6" Resolución de 1366 x 768 HD.
+Procesador de 8ª generación Intel Core i5-8250U
+Memoria de sistema de 8GB para multitarea avanzada
+Disco duro de 1TB para un amplio almacenamiento de archivos
+Diseño elegante con cuatro modos fexibles
+Gráficos Intel UHD 620
+Cámara web HD incorporada
+La salida HDMI expande tus opciones de visualización
+Conector combinado de auriculares / micrófono.
+Velocidad del procesador Hasta 3.4 GHz.</p>
+							<div>
+								<a class="precio">Precio $17,890</a>
+								<br>
+								<a href="convertible INSPIRON 5579 i5 de 15.6.html" class="precio">Galeria</a>
+								<br>
+								<a href="carrito.html" class="compra">Comprar</a>
+							</div>
+						</div>
+					</section>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+</body>
+</html>

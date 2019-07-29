@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<title>Monitores</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <script>
+        window.onload = function () {
+            // Variables
+            let baseDeDatos = [
+                {
+                    id: 1,
+                    nombre: 'Patata',
+                    precio: 1
+                },
+                {
+                    id: 2,
+                    nombre: 'Cebolla',
+                    precio: 1.2
+                },
+                {
+                    id: 3,
+                    nombre: 'Calabacin',
+                    precio: 2.1
+                },
+                {
+                    id: 4,
+                    nombre: 'Fresas',
+                    precio: 0.6
+                }
+
+            ]
+            let $items = document.querySelector('#items');
+            let carrito = [];
+            let total = 0;
+            let $carrito = document.querySelector('#carrito');
+            let $total = document.querySelector('#total');
+            // Funciones
+            function renderItems () {
+                for (let info of baseDeDatos) {
+                    // Estructura
+                    let miNodo = document.createElement('div');
+                    miNodo.classList.add('card', 'col-sm-4');
+                    // Body
+                    let miNodoCardBody = document.createElement('div');
+                    miNodoCardBody.classList.add('card-body');
+                    // Titulo
+                    let miNodoTitle = document.createElement('h5');
+                    miNodoTitle.classList.add('card-title');
+                    miNodoTitle.textContent = info['nombre'];
+                    // Precio
+                    let miNodoPrecio = document.createElement('p');
+                    miNodoPrecio.classList.add('card-text');
+                    miNodoPrecio.textContent = info['precio'] + '€';
+                    // Boton
+                    let miNodoBoton = document.createElement('button');
+                    miNodoBoton.classList.add('btn', 'btn-primary');
+                    miNodoBoton.textContent = '+';
+                    miNodoBoton.setAttribute('marcador', info['id']);
+                    miNodoBoton.addEventListener('click', anyadirCarrito);
+                    // Insertamos
+                    miNodoCardBody.appendChild(miNodoTitle);
+                    miNodoCardBody.appendChild(miNodoPrecio);
+                    miNodoCardBody.appendChild(miNodoBoton);
+                    miNodo.appendChild(miNodoCardBody);
+                    $items.appendChild(miNodo);
+                }
+            }
+            function anyadirCarrito () {
+                // Anyadimos el Nodo a nuestro carrito
+                carrito.push(this.getAttribute('marcador'))
+                // Calculo el total
+                calcularTotal();
+                // Renderizamos el carrito
+                renderizarCarrito();
+
+            }
+
+            function renderizarCarrito () {
+                // Vaciamos todo el html
+                $carrito.textContent = '';
+                // Generamos los Nodos a partir de carrito
+                carrito.forEach(function (item, indice) {
+                    // Obtenemos el item que necesitamos de la variable base de datos
+                    let miItem = baseDeDatos.filter(function(itemBaseDatos) {
+                        return itemBaseDatos['id'] == item;
+                    });
+                    // Creamos el nodo del item del carrito
+                    let miNodo = document.createElement('li');
+                    miNodo.classList.add('list-group-item', 'text-right');
+                    miNodo.textContent = `${miItem[0]['nombre']} - ${miItem[0]['precio']}€`;
+                    // Boton de borrar
+                    let miBoton = document.createElement('button');
+                    miBoton.classList.add('btn', 'btn-danger', 'mx-5');
+                    miBoton.textContent = 'X';
+                    miBoton.setAttribute('posicion', indice);
+                    miBoton.addEventListener('click', borrarItemCarrito);
+                    // Mezclamos nodos
+                    miNodo.appendChild(miBoton);
+                    $carrito.appendChild(miNodo);
+                })
+            }
+
+            function borrarItemCarrito () {
+                // Obtenemos la posicion que hay en el boton pulsado
+                let posicion = this.getAttribute('posicion');
+                // Borramos la posicion que nos interesa
+                carrito.splice(posicion, 1);
+                // volvemos a renderizar
+                renderizarCarrito();
+                // Calculamos de nuevo el precio
+                calcularTotal();
+            }
+
+            function calcularTotal () {
+                // Limpiamos precio anterior
+                total = 0;
+                // Recorremos el array del carrito
+                for (let item of carrito) {
+                    // De cada elemento obtenemos su precio
+                    let miItem = baseDeDatos.filter(function(itemBaseDatos) {
+                        return itemBaseDatos['id'] == item;
+                    });
+                    total = total + miItem[0]['precio'];
+                }
+                // Formateamos el total para que solo tenga dos decimales
+                let totalDosDecimales = total.toFixed(2);
+                // Renderizamos el precio en el HTML
+                $total.textContent = totalDosDecimales;
+            }
+            // Eventos
+
+            // Inicio
+            renderItems();
+        }
+    </script>
+
+
+
+	<link rel="stylesheet" href="css/estilos.css">
+	<link rel="stylesheet" href="css/style.css">
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
+
+	<script src="js/jquery-3.2.1.js"></script>
+	<script src="js/script.js"></script>
+</head>
+<body>
+	<header class="full-width NavBarP">
+	<div class="full-width NavBarP-Logo"><img src="" height="80"></div>
+	<nav class="full-width NavBarP-Nav">
+		<ul class="full-width list-unstyled">
+			<li><a href="index.html">Inicio</a></li>
+			<li><a href="productos2.html">Productos</a></li>
+			<li><a href="acerca de.html">Acerca de</a></li>
+		</ul>
+	</nav>
+	<i class="fa fa-bars visible-xs btn-menuMobile ShowMenuMobile" aria-hidden="true"></i>
+</header>
+
+<script src="js/jquery-3.1.0.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/main.js"></script>
+<section class="banner">
+		<div class="banner-content">
+			<div class="wrap">
+
+				<h1>Monitores</h1>
+
+				<div class="store-wrapper">
+					<section class="products-list">
+						<div class="product-item" category="pc_hp">
+							<img src="assets\img\monitores\Acer - Monitor LED 4K de 31.5 ET322QK\1000216651_ra.jpg" alt="" style="width:100%;" >
+							<p>Resolución 4K Ultra HD 3840 x 2160
+Tiempo de respuesta de 4 ms
+Frecuencia de actualización de 60 Hz
+Monitor LED antirreflejo de 31.5 "
+Tecnología FreeSync
+2 entradas HDMI y DisplayPort
+Ángulos de visión horizontales y verticales de 178°
+Altavoces incorporados de 2 vatios
+100,000,000: 1 ratio de contraste dinámico
+300 cd / m² de luminosidad Produce imágenes brillantes</p>
+							<div>
+								<a href="" class="precio">Precio $11,499</a>
+								<br>
+								<a href="Acer - Monitor LED 4K de 31.5 ET322QK.html" class="precio">Galeria</a>
+								<br>
+								<a href="carrito.html" class="compra">Comprar</a>
+							</div>
+						</div>
+
+						<div class="product-item" category="pc_hp">
+							<img src="assets\img\monitores\LG - Monitor ULTRAWIDE IPS de 34\1000214022cv16a.jpg" alt="" >
+							<p>Resolución de 2560 x 1080 WFHD
+Tiempo de respuesta de 5 ms
+Frecuencia de actualización de 75 Hz
+Monitor LED de 34"
+Pantalla Ultra Wide
+Tecnología FreeSync
+2 entradas HDMI
+Ángulos de visión horizontales y verticales de 178°
+Relación de contraste de 1,000: 1
+Brillo de 250 cd / m²
+Split Screen 2.0
+</p>
+							<div>
+								<a class="precio">Precio $8,499</a>
+								<br>
+								<a href="LG - Monitor ULTRAWIDE IPS de 34.html" class="precio">Galeria</a>
+								<br>
+								<a href="carrito.html" class="Precio">Comprar</a>
+							</div>
+						</div>
+
+						<div class="product-item" category="pc_hp">
+							<img src="assets\img\monitores\Monitor Curvo QLED de Gaming de 49\1000214183cv12a.jpg" alt="" >
+							<p>Resolución 3840 x 1080
+Tiempo de respuesta de 1 ms
+Frecuencia de actualización de 144 Hz
+Monitor LED de 49"
+Pantalla curva
+2 entradas HDMI y Mini DisplayPort
+2 puertos USB 3.0
+Ángulos de visión horizontales y verticales de 178°
+Dimensiones del equipo con soporte
+120.3 x 52.5 x 38.1 cm.</p>
+							<div>
+								<a class="precio">Precio $23,998</a>
+								<br>
+								<a href="Monitor Curvo QLED de Gaming de 49.html" class="precio">Galeria</a>
+								<br>
+								<a href="carrito.html" class="compra">Comprar</a>
+							</div>
+						</div>
+
+						<div class="product-item" category="pc_hp">
+							<img src="assets\img\monitores\Monitor LED curvo de gaming de 27\1000215870_ra.jpg" alt="" >
+							<p>El gigantesco panel QHD ofrece 77% más píxeles que los monitores Full HD estándar
+tiempo de respuesta de 5 ms
+frecuencia de actualización de 75 Hz.
+Certificación AMD FreeSync
+Vista panorámica
+Fácil acceso a los puertos
+Diseño compacto e impecable</p>
+							<div>
+								<a class="precio">Precio $12,999</a>
+								<br>
+								<a href="Monitor LED curvo de gaming de 27.html" class="precio">Galeria</a>
+								<br>
+								<a href="carrito.html" class="compra">Comprar</a>
+							</div>
+						</div>
+
+					</section>
+				</div>
+			</div>
+		</div>
+	</section>
+
+
+</body>
+</html>

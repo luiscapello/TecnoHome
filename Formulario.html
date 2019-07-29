@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>FormularioPalEmmanuel</title>
+        <link rel = "stylesheet" type =text/css href="Style/estilo.css">
+        <link rel = "stylesheet" type =text/css href="Calendario/jquery-ui-1.12.1.custom/jquery-ui.css">
+        <script src= "Calendario/jquery-3.3.1.min.js"></script>
+        <script src="Calendario/jquery-ui-1.12.1.custom/jquery-ui.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body background="BackGround/binaryWorld.jpg">
+        <div class="form">
+            <form action="BD to XML.php" method="post">
+              <label for="id"> Nombre del archivo </label>
+                <input type="text" name="archivo" onkeypress="return check(event)" placeholder="ESCRIBE EL NOMBRE DEL ARCHIVO" required>
+                <br>
+                <label for="provedor"> proveedor: </label>
+                <input type="text" name="provedor" placeholder="COLOCA NOMBRE DEL PROVEDOR" required>
+                <br>
+                <label for="producto"> Producto: </label>
+                <input type="text" name="producto"onKeyUp="this.value=this.value.toLowerCase();" placeholder="COLOCA NOMBRE DEL PRODUCTO" required>
+                <br>
+                <label for="cantidad"> Cantidad: </label>
+                <input type="number" name="cantidad" placeholder="COLOCA SU LA CANTIDAD" required>
+                <br>
+                <label for="precio"> Precio: </label>
+                <input type="number" name="precio" placeholder="COLOCA EL PRECIO" require>
+                <br>
+		<label for="descripcion"> Descripcion: </label>
+		<textarea type="text" name="descripcion" rows="10" cols="50" placeholder="COLOCA LA DESCRIPCIÓN DEL PRODUCTO" required></textarea> 
+		<br>
+                <br>
+                <br>
+                <br>
+                <input type="submit" value ="Crear xml" >
+                <br>
+            </form>
+        </div>
+    </body>
+</html>
+
+<script type="text/javascript">
+    
+$(function(){
+    $("#calendario").datepicker({
+    dateFormat: 'yy-mm-dd'
+});
+});
+
+function check(e) {
+    tecla = (document.all) ? e.keyCode : e.which;
+
+    //Tecla de retroceso para borrar, siempre la permite
+    if (tecla == 8) {
+        return true;
+    }
+
+    // Patron de entrada, en este caso solo acepta numeros y letras
+    patron = /[A-Za-z0-9]/;
+    tecla_final = String.fromCharCode(tecla);
+    return patron.test(tecla_final);
+}
+
+
+</script>
